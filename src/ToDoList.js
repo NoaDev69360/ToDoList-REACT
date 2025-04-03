@@ -1,35 +1,47 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react';
 
-function TodoList () {
-  const [todos, setTodos] = useState([])
-  const [inputValue, setInputValue] = useState('')
+function TodoList() {
+  const [todos, setTodos] = useState([]);
+  const [inputValue, setInputValue] = useState('');
 
-function handleChange(e){
-  setInputValue(e.target.value)
-}
+  function handleChange(e) {
+    setInputValue(e.target.value);
+  }
 
-function handleSubmit(e){
-  e.preventDefault()
-  setTodos([...todos, inputValue])
-  setInputValue('')
-}
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (inputValue.trim() !== '') {
+      setTodos([...todos, inputValue]);  // Ajoute le todo à la liste
+      setInputValue('');  // Vide le champ de saisie
+    }
+  }
+
+  function handleDelete(todo) {
+    setTodos(todos.filter((item) => item !== todo)); // Supprime le todo spécifique
+  }
+
   return (
     <div>
       <h1>App Todo List</h1>
-      <form>
-        <input type='text' value={inputValue} onChange={handleChange}/>
-        <button onClick={handleSubmit}>Add Todo</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleChange}
+          placeholder="Enter your todo"
+        />
+        <button type="submit">Add Todo</button>
       </form>
       <ul>
-        {todos.map((todo) => (
-          <li key={todo}>{todo}
-           <button>Delete</button>
+        {todos.map((todo, index) => (
+          <li key={index}>
+            {todo}
+            <button onClick={() => handleDelete(todo)}>Delete</button>
           </li>
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
-export default TodoList
+export default TodoList;
